@@ -28,6 +28,55 @@ export const fetch_users = () => {
 
 export const create_user = user => api_post("/users", {user});
 
+export const create_invite = async (invite, event_id) => {
+  let state = store.getState();
+  let token = state?.session?.token;
+  console.log(event_id);
+
+  let data = new FormData();
+  data.append("invite[invitee]", invite.invitee);
+  data.append("invite[event_id]", event_id);
+
+  console.log("Proper");
+  console.log(data);
+
+  let opts = {
+    method: "POST",
+    body: data,
+    headers: {
+      "x-auth": token,
+    },
+  };
+
+  console.log(opts);
+  let response = await fetch("http://localhost:4000/api/v1/invites", opts);
+  return await response.json();
+};
+
+export const create_comment = async (comment, event_id) => {
+  let state = store.getState();
+  let token = state?.session?.token;
+  console.log(event_id);
+
+  let data = new FormData();
+  data.append("comment[text]", comment.text);
+  data.append("comment[event_id]", event_id);
+
+  console.log(data);
+
+  let opts = {
+    method: "POST",
+    body: data,
+    headers: {
+      "x-auth": token,
+    },
+  };
+
+  let response = await fetch("http://localhost:4000/api/v1/comments", opts);
+  return await response.json();
+};
+
+
 export const fetch_events = () => {
   api_get("/events").then((data) => store.dispatch({
     type: "events/set",
@@ -90,7 +139,32 @@ export const fetch_comments_by_event_id = async eventId => {
 
 export const fetch_user_by_id = async userId => {
   return await api_get("/users/" + userId);
-}
+};
+
+export const fetch_invite_by_id = async inviteId => {
+  return await api_get("/invites/" + inviteId);
+};
+
+export const respond_invite = async (response, invite_id) => {
+  let state = store.getState();
+  let token = state?.session?.token;
+
+  let data = new FormData();
+  data.append("id", invite_id);
+  data.append("invite[response]", response);
+
+  let opts = {
+    method: "PATCH",
+    body: data,
+    headers: {
+      "x-auth": token,
+    },
+  };
+
+  let resp = await fetch("http://localhost:4000/api/v1/invites/" + invite_id, opts);
+  return await resp.json();
+
+};
 
 export const load_defaults = () => {
   fetch_users();

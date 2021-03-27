@@ -13,6 +13,7 @@ defmodule BackendWeb.InviteView do
   def render("invite.json", %{invite: invite}) do
     %{id: invite.id,
       invitee: invite.invitee,
-      response: invite.response}
+      response: invite.response,
+      event_id: invite.event_id}
   end
 end

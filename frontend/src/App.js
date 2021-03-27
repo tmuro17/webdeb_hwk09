@@ -8,6 +8,9 @@ import UserList from "./Users/List";
 import UserNew from "./Users/New";
 import EventNew from "./Events/New";
 import EventShow from "./Events/Show";
+import InviteNew from "./Invites/New";
+import {InviteRespond} from "./Invites/Respond";
+import CommentNew from "./Comments/New";
 
 const App = () => {
   return (
@@ -21,15 +24,26 @@ const App = () => {
           <EventNew/>
         </Route>
         <Route path="/events/show/:eventId" exact render={(props) => {
-          let id = props.match.params.eventId
-          return <EventShow eventId={id}/>
+          let id = props.match.params.eventId;
+          return <EventShow eventId={id}/>;
         }}/>
-
+        <Route path="/invites/new/:eventId" exact render={(props) => {
+          let id = props.match.params.eventId;
+          return <InviteNew eventId={id}/>;
+        }}/>
+        <Route path="/comments/new/:eventId" exact render={(props) => {
+          let id = props.match.params.eventId;
+          return <CommentNew eventId={id}/>;
+        }}/>
+        <Route path="/invites/respond/:inviteId" exact render={(props) => {
+          let id = props.match.params.inviteId;
+          return <InviteRespond inviteId={id}/>;
+        }}/>
         <Route path="/users" exact>
           <UserList/>
         </Route>
         <Route path="/users/new" exact>
-          <UserNew />
+          <UserNew/>
         </Route>
       </Switch>
     </Container>

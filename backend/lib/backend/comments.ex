@@ -49,8 +49,8 @@ defmodule Backend.Comments do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_comment(attrs \\ %{}) do
-    %Comment{}
+  def create_comment(attrs \\ %{}, user_id) do
+    %Comment{user_id: user_id}
     |> Comment.changeset(attrs)
     |> Repo.insert()
   end

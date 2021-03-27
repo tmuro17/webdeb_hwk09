@@ -4,6 +4,10 @@ defmodule BackendWeb.InviteController do
   alias Backend.Invites
   alias Backend.Invites.Invite
 
+  alias BackendWeb.Plugs
+  plug Plugs.RequireAuth when action
+                              in [:create, :update]
+
   action_fallback BackendWeb.FallbackController
 
   def index(conn, _params) do
@@ -26,6 +30,8 @@ defmodule BackendWeb.InviteController do
   end
 
   def update(conn, %{"id" => id, "invite" => invite_params}) do
+    IO.inspect id
+    IO.inspect invite_params
     invite = Invites.get_invite!(id)
 
     with {:ok, %Invite{} = invite} <- Invites.update_invite(invite, invite_params) do

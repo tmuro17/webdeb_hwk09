@@ -1,6 +1,8 @@
-import {Card, Col, Container, Row, Table} from "react-bootstrap";
-import {fetch_comments_by_event_id, fetch_event_by_id, fetch_invites_by_event_id, fetch_user_by_id} from "../api";
+import {Button, Card, Col} from "react-bootstrap";
+import {fetch_comments_by_event_id, fetch_event_by_id, fetch_invites_by_event_id} from "../api";
 import {useEffect, useState} from "react";
+import {Invites} from "../Invites/Show";
+import {Comments} from "../Comments/Show";
 
 const Event = ({event}) => {
   return (
@@ -16,65 +18,6 @@ const Event = ({event}) => {
   );
 };
 
-const Invites = ({invites}) => {
-  let rows = invites.map((invite) => <Invite invite={invite}/>);
-  return (
-    <Table>
-      <thead>
-      <tr>
-        <th>Invitee</th>
-        <th>Response</th>
-      </tr>
-      </thead>
-      <tbody>
-      {rows}
-      </tbody>
-    </Table>
-  );
-};
-
-const Invite = ({invite}) => {
-  return (
-    <tr>
-      <td>{invite.invitee}</td>
-      <td>{invite.response}</td>
-    </tr>
-  );
-};
-
-const Comments = ({comments}) => {
-  let cards = comments.map((cmmnt) => <Comment comment={cmmnt}/>);
-
-  return (
-    <div>
-      <h2>Comments:</h2>
-      <Container>
-        {cards}
-      </Container>
-    </div>
-  );
-};
-
-const Comment = ({comment}) => {
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    fetch_user_by_id(comment.user_id).then((c) => setUser(c));
-  }, [comment.user_id]);
-
-  return (
-    <Row>
-      <Col>
-        <Card>
-          <Card.Body>
-            <Card.Text><strong>Author:</strong> {user.name}</Card.Text>
-            <Card.Text>{comment.text}</Card.Text>
-          </Card.Body>
-        </Card>
-      </Col>
-    </Row>
-  );
-};
 
 const EventShow = ({eventId}) => {
   const [event, setEvent] = useState({});
@@ -102,8 +45,10 @@ const EventShow = ({eventId}) => {
       <br/>
       <Event event={event}/>
       <br/>
+      <Button variant={"outline-primary"} href={"/invites/new/" + event.id}>New Invite</Button>
       <Invites invites={invites}/>
       <br/>
+      <Button variant={"outline-primary"} href={"/comments/new/" + event.id}>New Comment</Button>
       <Comments comments={comments}/>
     </div>
   );
